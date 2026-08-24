@@ -1,6 +1,48 @@
 <script setup>
-import HelloWorld from './components/HelloWorld.vue'
-import TheWelcome from './components/TheWelcome.vue'
+
+
+import { ref } from 'vue'
+
+const events = ref([
+  {
+    id: 1,
+    title: 'Community Clean-Up Day',
+    date: '15 September 2026',
+    location: 'Clayton'
+  },
+  {
+    id: 2,
+    title: 'E-Waste Collection Drive',
+    date: '20 September 2026',
+    location: 'Melbourne CBD'
+  },
+  {
+    id: 3,
+    title: 'Plastic Free Workshop',
+    date: '25 September 2026',
+    location: 'Glen Waverley'
+  }
+])
+
+const resources = ref([
+  {
+    id: 1,
+    title: 'How to Recycle Plastic',
+    type: 'Guide'
+  },
+  {
+    id: 2,
+    title: 'Understanding Circular Economy',
+    type: 'Article'
+  },
+  {
+    id: 3,
+    title: 'Composting Basics',
+    type: 'Video'
+  }
+])
+
+
 </script>
 
 <template>

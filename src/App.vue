@@ -51,43 +51,82 @@ const resources = ref([
 
 <template>
 
-<div class="container py-5">
-<h1 class="text-center">
-EcoCycle Melbourne
-</h1>
+<div class="container-fluid py-5 px-5">
+<div class="row justify-content-center">
 
-<p class="text-center">
-Reduce Waste • Recycle Better
-</p>
+<div
+  class="col-12 col-lg-11 col-xl-10"
+  style="max-width:1440px"
+>
+<div class="text-center py-5 mb-5">
 
-<h2 class="mt-5">
-Upcoming Events
+  <h1 class="display-2 fw-bold">
+    EcoCycle Melbourne
+  </h1>
+
+  <p class="lead">
+    Reduce Waste • Recycle Better
+  </p>
+
+</div>
+
+<h2 class="text-center mb-4">
+  Upcoming Events
 </h2>
 
-<div class="row">
-<div class="col-12 col-md-6 col-lg-4 mb-4"
-v-for="event in events"
-:key="event.id">
-<EventCard :event="event"/>
-</div>
+<div class="row justify-content-center g-4">
+
+
+  <div
+    class="
+      col-12
+      col-md-6
+      col-lg-4
+      d-flex
+    "
+    v-for="event in events"
+    :key="event.id"
+  >
+
+    <EventCard :event="event"/>
+
+  </div>
+
 </div>
 
-<h2>
-Educational Resources
+<h2 class="text-center mt-5 mb-4">
+  Educational Resources
 </h2>
 
-<div class="row">
-<div class="col-12 col-md-6 col-lg-4 mb-4"
-v-for="resource in resources"
-:key="resource.id">
-<ResourceCard :resource="resource"/>
+<div class="row justify-content-center g-4">
+
+  <div
+    class="
+      col-12
+      col-md-6
+      col-lg-4
+      d-flex
+    "
+    v-for="resource in resources"
+    :key="resource.id"
+  >
+
+    <ResourceCard :resource="resource"/>
+
+  </div>
+
+<div class="row justify-content-center mt-5">
+
+  <div class="col-12 col-md-8 col-lg-6">
+
+    <VolunteerForm />
+
+  </div>
+  </div>
 </div>
 </div>
-
-<VolunteerForm/>
-
 </div>
-
+</div>
 </template>
 
 <style scoped>

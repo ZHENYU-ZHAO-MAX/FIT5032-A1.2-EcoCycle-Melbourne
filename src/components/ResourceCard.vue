@@ -5,7 +5,7 @@ defineProps({
 </script>
 
 <template>
-  <div class="card h-100">
+  <div class="card h-100 resource-card">
     <div class="card-body">
 
       <h5>{{ resource.title }}</h5>
@@ -19,3 +19,9 @@ defineProps({
     </div>
   </div>
 </template>
+
+<style scoped>
+.resource-card {
+  width: 100%;
+}
+</style>

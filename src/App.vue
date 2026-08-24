@@ -3,6 +3,10 @@
 
 import { ref } from 'vue'
 
+import EventCard from './components/EventCard.vue'
+import ResourceCard from './components/ResourceCard.vue'
+import VolunteerForm from './components/VolunteerForm.vue'
+
 const events = ref([
   {
     id: 1,
@@ -46,17 +50,44 @@ const resources = ref([
 </script>
 
 <template>
-  <header>
-    <img alt="Vue logo" class="logo" src="./assets/logo.svg" width="125" height="125" />
 
-    <div class="wrapper">
-      <HelloWorld msg="You did it!" />
-    </div>
-  </header>
+<div class="container py-5">
+<h1 class="text-center">
+EcoCycle Melbourne
+</h1>
 
-  <main>
-    <TheWelcome />
-  </main>
+<p class="text-center">
+Reduce Waste • Recycle Better
+</p>
+
+<h2 class="mt-5">
+Upcoming Events
+</h2>
+
+<div class="row">
+<div class="col-12 col-md-6 col-lg-4 mb-4"
+v-for="event in events"
+:key="event.id">
+<EventCard :event="event"/>
+</div>
+</div>
+
+<h2>
+Educational Resources
+</h2>
+
+<div class="row">
+<div class="col-12 col-md-6 col-lg-4 mb-4"
+v-for="resource in resources"
+:key="resource.id">
+<ResourceCard :resource="resource"/>
+</div>
+</div>
+
+<VolunteerForm/>
+
+</div>
+
 </template>
 
 <style scoped>

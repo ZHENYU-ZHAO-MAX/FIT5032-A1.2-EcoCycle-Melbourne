@@ -62,6 +62,29 @@ const validateReason = () => {
 
 const selectedEvent = ref('')
 
+const submitted =
+ref(false)
+
+const submitForm = () => {
+
+validateName()
+
+validateEmail()
+
+validateReason()
+
+if(
+!nameError.value &&
+!emailError.value &&
+!reasonError.value
+){
+
+submitted.value=true
+
+}
+
+}
+
 </script>
 
 <template>
@@ -148,6 +171,32 @@ events
 </option>
 
 </select>
+
+</div>
+
+<button
+class="
+btn
+btn-success
+w-100
+"
+@click="
+submitForm
+"
+>
+Submit Registration
+</button>
+
+<div
+v-if="submitted"
+class="
+alert
+alert-success
+mt-3
+"
+>
+
+Registration Submitted Successfully.
 
 </div>
 

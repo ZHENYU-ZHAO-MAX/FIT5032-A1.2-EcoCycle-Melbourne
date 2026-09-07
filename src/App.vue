@@ -58,7 +58,23 @@ const resources = ref([
   class="col-12 col-lg-11 col-xl-10"
   style="max-width:1440px"
 >
-<div class="text-center py-5 mb-5">
+<div
+class="
+text-center
+py-5
+mb-5
+rounded
+shadow
+"
+style="
+background:linear-gradient(
+135deg,
+#198754,
+#20c997
+);
+color:white;
+"
+>
 
   <h1 class="display-2 fw-bold">
     EcoCycle Melbourne
@@ -68,9 +84,16 @@ const resources = ref([
     Reduce Waste • Recycle Better
   </p>
 
+<button
+class="btn btn-light btn-lg mt-3"
+>
+Get Involved
+</button>
+
+
 </div>
 
-<h2 class="text-center mb-4">
+<h2 class="text-center mt-5 mb-4 text-success">
   Upcoming Events
 </h2>
 
@@ -94,7 +117,7 @@ const resources = ref([
 
 </div>
 
-<h2 class="text-center mt-5 mb-4">
+<h2 class="text-center mt-5 mb-4 text-primary">
   Educational Resources
 </h2>
 

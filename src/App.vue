@@ -12,19 +12,22 @@ const events = ref([
     id: 1,
     title: 'Community Clean-Up Day',
     date: '15 September 2026',
-    location: 'Clayton'
+    location: 'Clayton',
+    registered:false
   },
   {
     id: 2,
     title: 'E-Waste Collection Drive',
     date: '20 September 2026',
-    location: 'Melbourne CBD'
+    location: 'Melbourne CBD',
+    registered:false
   },
   {
     id: 3,
     title: 'Plastic Free Workshop',
     date: '25 September 2026',
-    location: 'Glen Waverley'
+    location: 'Glen Waverley',
+    registered:false
   }
 ])
 
@@ -46,6 +49,16 @@ const resources = ref([
   }
 ])
 
+const registerEvent = (eventId) => {
+
+const event =
+events.value.find(
+e => e.id === eventId
+)
+
+event.registered = true
+
+}
 
 </script>
 
@@ -111,7 +124,10 @@ Get Involved
     :key="event.id"
   >
 
-    <EventCard :event="event"/>
+    <EventCard
+:event="event"
+@register-event="registerEvent"
+/>
 
   </div>
 

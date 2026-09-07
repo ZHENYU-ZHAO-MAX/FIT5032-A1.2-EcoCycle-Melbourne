@@ -2,6 +2,10 @@
 defineProps({
   event: Object
 })
+
+defineEmits([
+'register-event'
+])
 </script>
 
 <template>
@@ -19,6 +23,26 @@ defineProps({
       <p>
         {{ event.location }}
       </p>
+
+      <button
+v-if="!event.registered"
+class="btn btn-success"
+@click="
+$emit(
+'register-event',
+event.id
+)
+"
+>
+Register
+</button>
+
+<span
+v-else
+class="badge bg-success"
+>
+✅ Registered
+</span>
 
     </div>
   </div>

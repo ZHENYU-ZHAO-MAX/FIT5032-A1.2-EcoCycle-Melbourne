@@ -1,4 +1,7 @@
 <script setup>
+defineProps({
+events:Array
+})
 import { ref } from 'vue'
 
 const name = ref('')
@@ -56,6 +59,9 @@ const validateReason = () => {
   }
 
 }
+
+const selectedEvent = ref('')
+
 </script>
 
 <template>
@@ -109,6 +115,39 @@ v-model="reason"
 <div class="text-danger">
 {{ reasonError }}
 </div>
+
+</div>
+
+<div class="mb-3">
+
+<label>
+Select Event
+</label>
+
+<select
+class="form-select"
+v-model="selectedEvent"
+>
+
+<option disabled value="">
+Please Select
+</option>
+
+<option
+v-for="
+event
+in
+events
+"
+:key="event.id"
+:value="event.title"
+>
+
+{{ event.title }}
+
+</option>
+
+</select>
 
 </div>
 

@@ -158,7 +158,9 @@ Get Involved
 
   <div class="col-12 col-md-8 col-lg-6">
 
-    <VolunteerForm />
+    <VolunteerForm
+:events="events"
+/>
 
   </div>
   </div>

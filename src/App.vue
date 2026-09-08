@@ -16,21 +16,24 @@ const events = ref([
     title: 'Community Clean-Up Day',
     date: '15 September 2026',
     location: 'Clayton',
-    registered:false
+    registered:false,
+    ratings:[5,4,5]
   },
   {
     id: 2,
     title: 'E-Waste Collection Drive',
     date: '20 September 2026',
     location: 'Melbourne CBD',
-    registered:false
+    registered:false,
+    ratings:[4,4,5]
   },
   {
     id: 3,
     title: 'Plastic Free Workshop',
     date: '25 September 2026',
     location: 'Glen Waverley',
-    registered:false
+    registered:false,
+    ratings:[5,5,4]
   }
 ])
 
@@ -62,6 +65,24 @@ e => e.id === eventId
 event.registered = true
 
 }
+
+const submitRating = (eventId, rating) => {
+
+  const event =
+    events.value.find(
+      e => e.id === eventId
+    )
+
+  if(event && rating){
+
+    event.ratings.push(
+      Number(rating)
+    )
+
+  }
+
+}
+
 
 const users = ref([
   {
@@ -304,9 +325,16 @@ Get Involved
   >
 
     <EventCard
-:event="event"
-@register-event="registerEvent"
+  :event="event"
+  @register-event="registerEvent"
+  @submit-rating="
+    submitRating(
+      $event.eventId,
+      $event.rating
+    )
+  "
 />
+
 
   </div>
 

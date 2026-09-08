@@ -1,11 +1,32 @@
 <script setup>
-defineProps({
+
+import { ref, computed } from 'vue'
+
+const props = defineProps({
   event: Object
 })
 
-defineEmits([
-'register-event'
+const emit = defineEmits([
+  'register-event',
+  'submit-rating'
 ])
+
+const selectedRating = ref('')
+
+const averageRating = computed(() => {
+
+  const ratings = props.event.ratings
+
+  return (
+    ratings.reduce(
+      (a,b) => a+b,
+      0
+    ) / ratings.length
+
+  ).toFixed(1)
+
+})
+
 </script>
 
 <template>
@@ -43,6 +64,51 @@ class="badge bg-success"
 >
 ✅ Registered
 </span>
+
+<hr>
+
+<p>
+
+⭐ Average Rating:
+
+{{ averageRating }}/5
+
+</p>
+
+<select
+  class="form-select mb-2"
+  v-model="selectedRating"
+>
+
+  <option value="">
+    Select Rating
+  </option>
+
+  <option value="1">1 Star</option>
+  <option value="2">2 Stars</option>
+  <option value="3">3 Stars</option>
+  <option value="4">4 Stars</option>
+  <option value="5">5 Stars</option>
+
+</select>
+
+<button
+  class="btn btn-warning"
+  @click="
+    $emit(
+      'submit-rating',
+      {
+        eventId:event.id,
+        rating:selectedRating
+      }
+    )
+  "
+>
+
+Submit Rating
+
+</button>
+
 
     </div>
   </div>

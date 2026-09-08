@@ -66,6 +66,18 @@ event.registered = true
 
 }
 
+const scrollToVolunteer = () => {
+
+  document
+    .getElementById(
+      'volunteer-section'
+    )
+    ?.scrollIntoView({
+      behavior:'smooth'
+    })
+
+}
+
 const submitRating = (eventId, rating) => {
 
   const event =
@@ -155,6 +167,30 @@ onMounted(() => {
 
 <template>
 
+<nav
+class="
+navbar
+navbar-expand-lg
+navbar-dark
+bg-success
+mb-4
+"
+>
+
+<div class="container-fluid">
+
+<span
+class="navbar-brand"
+>
+
+EcoCycle Melbourne
+
+</span>
+
+</div>
+
+</nav>
+
 <div class="container-fluid py-5 px-5">
 <div class="row justify-content-center">
 
@@ -190,6 +226,7 @@ color:white;
 
 <button
 class="btn btn-light btn-lg mt-3"
+@click="scrollToVolunteer"
 >
 Get Involved
 </button>
@@ -249,7 +286,7 @@ Get Involved
 <div
   v-if="
     currentUser &&
-    currentUser.role==='Admin'
+    currentUser.role==='admin'
   "
   class="
     card
@@ -361,7 +398,10 @@ Get Involved
 
   </div>
 
-<div class="row justify-content-center mt-5">
+<div
+id="volunteer-section"
+class="row justify-content-center mt-5"
+>
 
   <div class="col-12 col-md-8 col-lg-6">
 

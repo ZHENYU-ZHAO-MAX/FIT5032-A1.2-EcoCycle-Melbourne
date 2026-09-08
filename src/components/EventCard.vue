@@ -30,7 +30,14 @@ const averageRating = computed(() => {
 </script>
 
 <template>
-  <div class="card h-100 shadow-sm event-card">
+  <div
+class="
+card
+shadow-sm
+border-success
+h-100
+"
+>
     <div class="card-body">
 
       <h5 class="card-title">

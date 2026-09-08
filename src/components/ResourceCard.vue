@@ -5,7 +5,14 @@ defineProps({
 </script>
 
 <template>
-  <div class="card h-100 resource-card">
+  <div
+class="
+card
+shadow-sm
+border-primary
+h-100
+"
+>
     <div class="card-body">
 
       <h5>{{ resource.title }}</h5>

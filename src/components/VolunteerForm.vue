@@ -2,6 +2,11 @@
 defineProps({
 events:Array
 })
+
+import {
+  sanitizeInput
+}
+from '../utils/security'
 import { ref } from 'vue'
 
 const name = ref('')
@@ -72,6 +77,15 @@ validateName()
 validateEmail()
 
 validateReason()
+
+name.value =
+sanitizeInput(name.value)
+
+email.value =
+sanitizeInput(email.value)
+
+reason.value =
+sanitizeInput(reason.value)
 
 if(
 !nameError.value &&

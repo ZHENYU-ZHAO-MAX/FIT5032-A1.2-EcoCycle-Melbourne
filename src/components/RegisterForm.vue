@@ -1,5 +1,9 @@
 <script setup>
 
+import {
+  sanitizeInput
+}
+from '../utils/security'
 import { ref } from 'vue'
 
 const emit =
@@ -23,6 +27,39 @@ username:username.value,
 password:password.value,
 role:role.value
 })
+
+username.value =
+sanitizeInput(
+  username.value
+)
+
+if (
+  username.value.includes('<script') ||
+  username.value.includes('</script')
+){
+
+  alert(
+    'Potentially unsafe input detected.'
+  )
+
+  return
+
+}
+
+
+if(
+  password.value.length < 8
+){
+
+  alert(
+    'Password must be at least 8 characters'
+  )
+
+  return
+
+}
+
+
 
 emit('register',{
 

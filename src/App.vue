@@ -1,7 +1,8 @@
 <script setup>
 
 
-import { ref } from 'vue'
+import { ref , onMounted  } from 'vue'
+
 
 import EventCard from './components/EventCard.vue'
 import ResourceCard from './components/ResourceCard.vue'
@@ -59,6 +60,50 @@ e => e.id === eventId
 event.registered = true
 
 }
+
+const users = ref([
+  {
+    username: "admin",
+    password: "admin123",
+    role: "admin"
+  }
+])
+
+const currentUser = ref(null)
+
+const registerUser = (user) => {
+  users.value.push(user)
+}
+
+const loginUser = (credentials) => {
+
+  const foundUser = users.value.find(
+    user =>
+      user.username === credentials.username &&
+      user.password === credentials.password
+  )
+
+  if(foundUser){
+    currentUser.value = foundUser
+
+    localStorage.setItem(
+      "currentUser",
+      JSON.stringify(foundUser)
+    )
+  }
+}
+
+onMounted(() => {
+
+  const savedUser =
+    localStorage.getItem("currentUser")
+
+  if(savedUser){
+
+    currentUser.value =
+      JSON.parse(savedUser)
+  }
+})
 
 </script>
 
@@ -166,6 +211,15 @@ Get Involved
   </div>
 </div>
 </div>
+
+<LoginForm
+@login="loginUser"
+/>
+
+<RegisterForm
+@register="registerUser"
+/>
+
 </div>
 </div>
 </template>

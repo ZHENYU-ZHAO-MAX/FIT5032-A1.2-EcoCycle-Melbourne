@@ -7,6 +7,8 @@ import { ref , onMounted  } from 'vue'
 import EventCard from './components/EventCard.vue'
 import ResourceCard from './components/ResourceCard.vue'
 import VolunteerForm from './components/VolunteerForm.vue'
+import LoginForm from './components/LoginForm.vue'
+import RegisterForm from './components/RegisterForm.vue'
 
 const events = ref([
   {
@@ -72,7 +74,13 @@ const users = ref([
 const currentUser = ref(null)
 
 const registerUser = (user) => {
+
   users.value.push(user)
+
+  alert(
+    `User ${user.username} registered successfully`
+  )
+
 }
 
 const loginUser = (credentials) => {
@@ -84,25 +92,42 @@ const loginUser = (credentials) => {
   )
 
   if(foundUser){
+
     currentUser.value = foundUser
 
     localStorage.setItem(
-      "currentUser",
+      'currentUser',
       JSON.stringify(foundUser)
     )
+
   }
+
+}
+
+const logout = () => {
+
+  currentUser.value = null
+
+  localStorage.removeItem(
+    'currentUser'
+  )
+
 }
 
 onMounted(() => {
 
   const savedUser =
-    localStorage.getItem("currentUser")
+    localStorage.getItem(
+      'currentUser'
+    )
 
   if(savedUser){
 
     currentUser.value =
       JSON.parse(savedUser)
+
   }
+
 })
 
 </script>
@@ -148,6 +173,115 @@ class="btn btn-light btn-lg mt-3"
 Get Involved
 </button>
 
+</div>
+
+<div class="row justify-content-center mt-4 mb-5">
+
+  <div class="col-md-6">
+
+    <RegisterForm
+      @register="registerUser"
+    />
+
+  </div>
+
+  <div class="col-md-6">
+
+    <LoginForm
+      @login="loginUser"
+    />
+
+  </div>
+
+</div>
+
+
+
+<div
+  v-if="currentUser"
+  class="alert alert-success text-center"
+>
+
+  Welcome
+
+  <strong>
+    {{ currentUser.username }}
+  </strong>
+
+  |
+
+  Role:
+
+  {{ currentUser.role }}
+
+  <br>
+
+  <button
+    class="btn btn-danger mt-2"
+    @click="logout"
+  >
+    Logout
+  </button>
+
+</div>
+
+<div
+  v-if="
+    currentUser &&
+    currentUser.role==='Admin'
+  "
+  class="
+    card
+    border-danger
+    p-4
+    mb-4
+  "
+>
+
+  <h3>
+
+    Admin Dashboard
+
+  </h3>
+
+  <ul>
+
+    <li>Manage Events</li>
+
+    <li>View Volunteer Registrations</li>
+
+    <li>Monitor Event Ratings</li>
+
+  </ul>
+
+</div>
+
+<div
+  v-if="
+    currentUser &&
+    currentUser.role==='Volunteer'
+  "
+  class="
+    card
+    border-success
+    p-4
+    mb-4
+  "
+>
+
+  <h3>
+
+    Volunteer Dashboard
+
+  </h3>
+
+  <ul>
+
+    <li>My Registered Events</li>
+
+    <li>My Volunteer Activities</li>
+
+  </ul>
 
 </div>
 
@@ -211,15 +345,6 @@ Get Involved
   </div>
 </div>
 </div>
-
-<LoginForm
-@login="loginUser"
-/>
-
-<RegisterForm
-@register="registerUser"
-/>
-
 </div>
 </div>
 </template>

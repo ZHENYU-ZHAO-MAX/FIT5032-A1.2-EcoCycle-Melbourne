@@ -3,12 +3,12 @@ import { authReady, useAuth } from '../stores/auth'
 
 const routes = [
   { path: '/', name: 'home', component: () => import('../views/HomeView.vue'), meta: { title: 'Home' } },
-  { path: '/events', name: 'events', component: () => import('../views/NotFoundView.vue'), meta: { title: 'Events' } },  // TODO: EventsView.vue added in a later commit
-  { path: '/map', name: 'map', component: () => import('../views/NotFoundView.vue'), meta: { title: 'Event Map' } },  // TODO: MapView.vue added in a later commit
+  { path: '/events', name: 'events', component: () => import('../views/EventsView.vue'), meta: { title: 'Events' } },
+  { path: '/map', name: 'map', component: () => import('../views/MapView.vue'), meta: { title: 'Event Map' } },
   { path: '/resources', name: 'resources', component: () => import('../views/ResourcesView.vue'), meta: { title: 'Resources' } },
-  { path: '/join', name: 'join', component: () => import('../views/NotFoundView.vue'), meta: { title: 'Volunteer Registration', requiresAuth: true } },  // TODO: JoinView.vue added in a later commit
-  { path: '/impact', name: 'impact', component: () => import('../views/NotFoundView.vue'), meta: { title: 'My Impact', requiresAuth: true } },  // TODO: ImpactView.vue added in a later commit
-  { path: '/admin', name: 'admin', component: () => import('../views/NotFoundView.vue'), meta: { title: 'Admin Dashboard', requiresAuth: true, requiresAdmin: true } },  // TODO: AdminView.vue added in a later commit
+  { path: '/join', name: 'join', component: () => import('../views/JoinView.vue'), meta: { title: 'Volunteer Registration', requiresAuth: true } },
+  { path: '/impact', name: 'impact', component: () => import('../views/ImpactView.vue'), meta: { title: 'My Impact', requiresAuth: true } },
+  { path: '/admin', name: 'admin', component: () => import('../views/AdminView.vue'), meta: { title: 'Admin Dashboard', requiresAuth: true, requiresAdmin: true } },
   { path: '/login', name: 'login', component: () => import('../views/LoginView.vue'), meta: { title: 'Log in', guestOnly: true } },
   { path: '/register', name: 'register', component: () => import('../views/RegisterView.vue'), meta: { title: 'Create account', guestOnly: true } },
   { path: '/accessibility', name: 'accessibility', component: () => import('../views/AccessibilityView.vue'), meta: { title: 'Accessibility Statement' } },

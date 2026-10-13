@@ -1,20 +1,55 @@
-@import './base.css';
-
-#app {
-  width: 100%;
-  min-height: 100vh;
+:root {
+  --eco-green: #146c43;       /* 6.6:1 on white - passes WCAG AA for text */
+  --eco-green-dark: #0f5132;
+  --eco-bg: #f6faf7;
+  --eco-text: #1b2a22;
 }
 
-a,
-.green {
-  text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
-  transition: 0.4s;
-  padding: 3px;
+html { scroll-behavior: smooth; }
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: 0.01ms !important; transition-duration: 0.01ms !important; }
 }
 
-@media (hover: hover) {
-  a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
-  }
+body { background: var(--eco-bg); color: var(--eco-text); }
+#app { min-height: 100vh; display: flex; flex-direction: column; }
+main { flex: 1; }
+
+/* Skip link: visible on keyboard focus */
+.skip-link {
+  position: absolute; left: 0.5rem; top: -4rem; z-index: 2000;
+  background: #fff; color: #000; padding: 0.6rem 1rem; border: 2px solid #000; border-radius: 0.25rem;
+  transition: top 0.15s;
 }
+.skip-link:focus { top: 0.5rem; }
+
+/* Strong, consistent focus indicator (WCAG 2.4.7 / 1.4.11) */
+:focus-visible { outline: 3px solid #0b5ed7; outline-offset: 2px; box-shadow: 0 0 0 5px #fff; }
+.bg-eco, .btn-eco { background-color: var(--eco-green); border-color: var(--eco-green); color: #fff; }
+.btn-eco:hover, .btn-eco:focus { background-color: var(--eco-green-dark); border-color: var(--eco-green-dark); color: #fff; }
+.btn-outline-eco { color: var(--eco-green); border-color: var(--eco-green); }
+.btn-outline-eco:hover { background: var(--eco-green); color: #fff; }
+.text-eco { color: var(--eco-green) !important; }
+
+#page-heading:focus, #main-content:focus { outline: none; }
+
+.hero {
+  background: linear-gradient(135deg, #146c43, #0d6e5b);
+  color: #fff;
+}
+.text-muted, .form-text { color: #4b5a52 !important; } /* darker than Bootstrap default for 4.5:1 contrast */
+
+/* Tables */
+.table-sort-btn { background: none; border: 0; font-weight: 700; padding: 0; color: inherit; text-align: left; }
+.table-sort-btn:hover { text-decoration: underline; }
+.col-filter { min-width: 7rem; }
+
+.map-canvas { width: 100%; height: 480px; border-radius: 0.5rem; border: 1px solid #ced4da; }
+.chart-box { position: relative; height: 300px; }
+
+.visually-hidden-focusable:not(:focus):not(:focus-within) {
+  position: absolute !important; width: 1px !important; height: 1px !important; overflow: hidden !important; clip: rect(0, 0, 0, 0) !important;
+}
+
+/* Toasts */
+.toast-region { position: fixed; right: 1rem; bottom: 1rem; z-index: 3000; width: min(26rem, calc(100% - 2rem)); }

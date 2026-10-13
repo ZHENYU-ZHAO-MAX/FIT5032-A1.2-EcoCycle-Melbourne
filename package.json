@@ -1,16 +1,23 @@
 {
   "name": "eco-cycle-melbourne",
-  "version": "0.0.0",
+  "version": "3.0.0",
   "private": true,
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "deploy": "npm run build && firebase deploy"
   },
   "dependencies": {
     "bootstrap": "^5.3.8",
-    "vue": "^3.5.40"
+    "chart.js": "^4.4.7",
+    "firebase": "^11.10.0",
+    "jspdf": "^3.0.1",
+    "jspdf-autotable": "^3.8.4",
+    "mapbox-gl": "^3.9.4",
+    "vue": "^3.5.40",
+    "vue-router": "^4.5.0"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^6.0.8",

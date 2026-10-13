@@ -1,447 +1,78 @@
 <script setup>
+import { RouterLink, RouterView, useRouter } from 'vue-router'
+import ToastRegion from './components/ToastRegion.vue'
+import { useAuth } from './stores/auth'
+import { isFirebaseConfigured } from './firebase.js'
+import { toast } from './composables/useToast'
 
+const router = useRouter()
+const { state, isLoggedIn, isAdmin, displayName, logout, resendVerification } = useAuth()
 
-import { ref , onMounted  } from 'vue'
-
-
-import EventCard from './components/EventCard.vue'
-import ResourceCard from './components/ResourceCard.vue'
-import VolunteerForm from './components/VolunteerForm.vue'
-import LoginForm from './components/LoginForm.vue'
-import RegisterForm from './components/RegisterForm.vue'
-
-const events = ref([
-  {
-    id: 1,
-    title: 'Community Clean-Up Day',
-    date: '15 September 2026',
-    location: 'Clayton',
-    registered:false,
-    ratings:[5,4,5]
-  },
-  {
-    id: 2,
-    title: 'E-Waste Collection Drive',
-    date: '20 September 2026',
-    location: 'Melbourne CBD',
-    registered:false,
-    ratings:[4,4,5]
-  },
-  {
-    id: 3,
-    title: 'Plastic Free Workshop',
-    date: '25 September 2026',
-    location: 'Glen Waverley',
-    registered:false,
-    ratings:[5,5,4]
-  }
-])
-
-const resources = ref([
-  {
-    id: 1,
-    title: 'How to Recycle Plastic',
-    type: 'Guide'
-  },
-  {
-    id: 2,
-    title: 'Understanding Circular Economy',
-    type: 'Article'
-  },
-  {
-    id: 3,
-    title: 'Composting Basics',
-    type: 'Video'
-  }
-])
-
-const registerEvent = (eventId) => {
-
-const event =
-events.value.find(
-e => e.id === eventId
-)
-
-event.registered = true
-
+const doLogout = async () => {
+  await logout()
+  toast('You have been logged out.', 'info')
+  router.push('/')
 }
-
-const scrollToVolunteer = () => {
-
-  document
-    .getElementById(
-      'volunteer-section'
-    )
-    ?.scrollIntoView({
-      behavior:'smooth'
-    })
-
+const resend = async () => {
+  try { await resendVerification(); toast('Verification email sent.', 'info') } catch { toast('Please wait a moment before requesting another email.', 'warning') }
 }
-
-const submitRating = (eventId, rating) => {
-
-  const event =
-    events.value.find(
-      e => e.id === eventId
-    )
-
-  if(event && rating){
-
-    event.ratings.push(
-      Number(rating)
-    )
-
-  }
-
-}
-
-
-const users = ref([
-  {
-    username: "admin",
-    password: "admin123",
-    role: "admin"
-  }
-])
-
-const currentUser = ref(null)
-
-const registerUser = (user) => {
-
-  users.value.push(user)
-
-  alert(
-    `User ${user.username} registered successfully`
-  )
-
-}
-
-const loginUser = (credentials) => {
-
-  const foundUser = users.value.find(
-    user =>
-      user.username === credentials.username &&
-      user.password === credentials.password
-  )
-
-  if(foundUser){
-
-    currentUser.value = foundUser
-
-    localStorage.setItem(
-      'currentUser',
-      JSON.stringify(foundUser)
-    )
-
-  }
-
-}
-
-const logout = () => {
-
-  currentUser.value = null
-
-  localStorage.removeItem(
-    'currentUser'
-  )
-
-}
-
-onMounted(() => {
-
-  const savedUser =
-    localStorage.getItem(
-      'currentUser'
-    )
-
-  if(savedUser){
-
-    currentUser.value =
-      JSON.parse(savedUser)
-
-  }
-
-})
-
 </script>
 
 <template>
+  <a href="#main-content" class="skip-link">Skip to main content</a>
 
-<nav
-class="
-navbar
-navbar-expand-lg
-navbar-dark
-bg-success
-mb-4
-"
->
+  <header>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-eco" aria-label="Main navigation">
+      <div class="container-fluid px-4">
+        <RouterLink class="navbar-brand fw-bold" to="/">♻️ EcoCycle Melbourne</RouterLink>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation menu">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div id="mainNav" class="collapse navbar-collapse">
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item"><RouterLink class="nav-link" to="/events">Events</RouterLink></li>
+            <li class="nav-item"><RouterLink class="nav-link" to="/map">Map</RouterLink></li>
+            <li class="nav-item"><RouterLink class="nav-link" to="/resources">Resources</RouterLink></li>
+            <li v-if="isLoggedIn" class="nav-item"><RouterLink class="nav-link" to="/join">Volunteer</RouterLink></li>
+            <li v-if="isLoggedIn" class="nav-item"><RouterLink class="nav-link" to="/impact">My Impact</RouterLink></li>
+            <li v-if="isAdmin" class="nav-item"><RouterLink class="nav-link" to="/admin">Admin</RouterLink></li>
+          </ul>
+          <ul class="navbar-nav align-items-lg-center gap-lg-2">
+            <template v-if="isLoggedIn">
+              <li class="nav-item text-white small me-lg-2">
+                Signed in as <strong>{{ displayName }}</strong>
+                <span class="badge bg-light text-dark ms-1">{{ isAdmin ? 'Admin' : 'Volunteer' }}</span>
+              </li>
+              <li class="nav-item"><button type="button" class="btn btn-light btn-sm" @click="doLogout">Log out</button></li>
+            </template>
+            <template v-else>
+              <li class="nav-item"><RouterLink class="nav-link" to="/login">Log in</RouterLink></li>
+              <li class="nav-item"><RouterLink class="btn btn-light btn-sm" to="/register">Sign up</RouterLink></li>
+            </template>
+          </ul>
+        </div>
+      </div>
+    </nav>
+  </header>
 
-<div class="container-fluid">
-
-<span
-class="navbar-brand"
->
-
-EcoCycle Melbourne
-
-</span>
-
-</div>
-
-</nav>
-
-<div class="container-fluid py-5 px-5">
-<div class="row justify-content-center">
-
-<div
-  class="col-12 col-lg-11 col-xl-10"
-  style="max-width:1440px"
->
-<div
-class="
-text-center
-py-5
-mb-5
-rounded
-shadow
-"
-style="
-background:linear-gradient(
-135deg,
-#198754,
-#20c997
-);
-color:white;
-"
->
-
-  <h1 class="display-2 fw-bold">
-    EcoCycle Melbourne
-  </h1>
-
-  <p class="lead">
-    Reduce Waste • Recycle Better
-  </p>
-
-<button
-class="btn btn-light btn-lg mt-3"
-@click="scrollToVolunteer"
->
-Get Involved
-</button>
-
-</div>
-
-<div class="row justify-content-center mt-4 mb-5">
-
-  <div class="col-md-6">
-
-    <RegisterForm
-      @register="registerUser"
-    />
-
+  <div v-if="!isFirebaseConfigured" class="alert alert-warning rounded-0 mb-0 text-center" role="alert">
+    Firebase is not configured. Copy <code>.env.example</code> to <code>.env.local</code> and add your project keys.
+  </div>
+  <div v-if="isLoggedIn && !state.user.emailVerified" class="alert alert-info rounded-0 mb-0 text-center py-2" role="status">
+    Please verify your email address (check your inbox).
+    <button type="button" class="btn btn-link btn-sm p-0 align-baseline" @click="resend">Resend verification email</button>
   </div>
 
-  <div class="col-md-6">
+  <main id="main-content" tabindex="-1" class="container py-4">
+    <RouterView />
+  </main>
 
-    <LoginForm
-      @login="loginUser"
-    />
+  <footer class="bg-dark text-white py-3 mt-4">
+    <div class="container d-flex flex-wrap justify-content-between gap-2 small">
+      <span>© 2026 EcoCycle Melbourne · FIT5032 A3</span>
+      <RouterLink class="link-light" to="/accessibility">Accessibility statement</RouterLink>
+    </div>
+  </footer>
 
-  </div>
-
-</div>
-
-
-
-<div
-  v-if="currentUser"
-  class="alert alert-success text-center"
->
-
-  Welcome
-
-  <strong>
-    {{ currentUser.username }}
-  </strong>
-
-  |
-
-  Role:
-
-  {{ currentUser.role }}
-
-  <br>
-
-  <button
-    class="btn btn-danger mt-2"
-    @click="logout"
-  >
-    Logout
-  </button>
-
-</div>
-
-<div
-  v-if="
-    currentUser &&
-    currentUser.role==='admin'
-  "
-  class="
-    card
-    border-danger
-    p-4
-    mb-4
-  "
->
-
-  <h3>
-
-    Admin Dashboard
-
-  </h3>
-
-  <ul>
-
-    <li>Manage Events</li>
-
-    <li>View Volunteer Registrations</li>
-
-    <li>Monitor Event Ratings</li>
-
-  </ul>
-
-</div>
-
-<div
-  v-if="
-    currentUser &&
-    currentUser.role==='Volunteer'
-  "
-  class="
-    card
-    border-success
-    p-4
-    mb-4
-  "
->
-
-  <h3>
-
-    Volunteer Dashboard
-
-  </h3>
-
-  <ul>
-
-    <li>My Registered Events</li>
-
-    <li>My Volunteer Activities</li>
-
-  </ul>
-
-</div>
-
-<h2 class="text-center mt-5 mb-4 text-success">
-  Upcoming Events
-</h2>
-
-<div class="row justify-content-center g-4">
-
-
-  <div
-    class="
-      col-12
-      col-md-6
-      col-lg-4
-      d-flex
-    "
-    v-for="event in events"
-    :key="event.id"
-  >
-
-    <EventCard
-  :event="event"
-  @register-event="registerEvent"
-  @submit-rating="
-    submitRating(
-      $event.eventId,
-      $event.rating
-    )
-  "
-/>
-
-
-  </div>
-
-</div>
-
-<h2 class="text-center mt-5 mb-4 text-primary">
-  Educational Resources
-</h2>
-
-<div class="row justify-content-center g-4">
-
-  <div
-    class="
-      col-12
-      col-md-6
-      col-lg-4
-      d-flex
-    "
-    v-for="resource in resources"
-    :key="resource.id"
-  >
-
-    <ResourceCard :resource="resource"/>
-
-  </div>
-
-<div
-id="volunteer-section"
-class="row justify-content-center mt-5"
->
-
-  <div class="col-12 col-md-8 col-lg-6">
-
-    <VolunteerForm
-:events="events"
-/>
-
-  </div>
-  </div>
-</div>
-</div>
-</div>
-</div>
+  <ToastRegion />
 </template>
-
-<style scoped>
-header {
-  line-height: 1.5;
-}
-
-.logo {
-  display: block;
-  margin: 0 auto 2rem;
-}
-
-@media (min-width: 1024px) {
-  header {
-    display: flex;
-    place-items: center;
-    padding-right: calc(var(--section-gap) / 2);
-  }
-
-  .logo {
-    margin: 0 2rem 0 0;
-  }
-
-  header .wrapper {
-    display: flex;
-    place-items: flex-start;
-    flex-wrap: wrap;
-  }
-}
-</style>

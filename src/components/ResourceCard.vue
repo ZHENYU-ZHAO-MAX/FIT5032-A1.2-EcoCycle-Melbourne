@@ -1,34 +1,13 @@
 <script setup>
-defineProps({
-  resource: Object
-})
+defineProps({ resource: { type: Object, required: true } })
 </script>
 
 <template>
-  <div
-class="
-card
-shadow-sm
-border-primary
-h-100
-"
->
+  <article class="card shadow-sm border-primary h-100 w-100">
     <div class="card-body">
-
-      <h5>{{ resource.title }}</h5>
-
-      <span class="badge bg-success">
-
-        {{ resource.type }}
-
-      </span>
-
+      <h3 class="h5">{{ resource.title }}</h3>
+      <p v-if="resource.description" class="mb-2">{{ resource.description }}</p>
+      <span class="badge bg-success"><span class="visually-hidden">Type: </span>{{ resource.type }}</span>
     </div>
-  </div>
+  </article>
 </template>
-
-<style scoped>
-.resource-card {
-  width: 100%;
-}
-</style>

@@ -1,0 +1,56 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function signedIn() { return request.auth != null; }
+    function isAdmin()  { return signedIn() && request.auth.token.role == 'admin'; }
+    function isOwner(uid) { return signedIn() && request.auth.uid == uid; }
+
+    // Profiles are created/updated only by Cloud Functions (admin SDK bypasses rules).
+    match /users/{uid} {
+      allow read: if isOwner(uid) || isAdmin();
+      allow write: if false;
+    }
+
+    // Public read-only leaderboard (display name + points), written by Cloud Functions.
+    match /leaderboard/{uid} {
+      allow read: if signedIn();
+      allow write: if false;
+    }
+
+    match /events/{eventId} {
+      allow read: if true;
+      // Rating aggregates (ratingSum/Count/Avg) are written by Cloud Functions only.
+      allow create, update, delete: if isAdmin();
+    }
+
+    // Document id is "<eventId>_<uid>" so one registration per user per event.
+    match /registrations/{regId} {
+      allow read: if isAdmin() || (signedIn() && resource.data.uid == request.auth.uid);
+      allow create: if signedIn()
+        && request.resource.data.uid == request.auth.uid
+        && regId == request.resource.data.eventId + '_' + request.auth.uid
+        && request.resource.data.name is string && request.resource.data.name.size() between 1 and 100
+        && request.resource.data.reason is string && request.resource.data.reason.size() between 20 and 1000;
+      allow update: if false;
+      allow delete: if isAdmin() || (signedIn() && resource.data.uid == request.auth.uid);
+    }
+
+    // Document id is "<eventId>_<uid>"; value is 1..5.
+    match /ratings/{ratingId} {
+      allow read: if isAdmin() || (signedIn() && resource.data.uid == request.auth.uid);
+      allow create, update: if signedIn()
+        && request.resource.data.uid == request.auth.uid
+        && ratingId == request.resource.data.eventId + '_' + request.auth.uid
+        && request.resource.data.value is int
+        && request.resource.data.value >= 1 && request.resource.data.value <= 5;
+      allow delete: if false;
+    }
+
+    // Email send log written by the sendEmail Cloud Function.
+    match /emailLogs/{id} {
+      allow read: if isAdmin();
+      allow write: if false;
+    }
+  }
+}

@@ -75,7 +75,7 @@ const submit = async () => {
 
     <div class="mb-3">
       <label for="vf-name" class="form-label">Name</label>
-      <input id="vf-name" v-model="name" class="form-control" :class="{ 'is-invalid': errors.name }" autocomplete="name" required :aria-invalid="!!errors.name" :aria-describedby="errors.name ? 'vf-name-err' : undefined" />
+      <input id="vf-name" v-model="name" maxlength="80" class="form-control" :class="{ 'is-invalid': errors.name }" autocomplete="name" required :aria-invalid="!!errors.name" :aria-describedby="errors.name ? 'vf-name-err' : undefined" />
       <div v-if="errors.name" id="vf-name-err" class="invalid-feedback d-block">{{ errors.name }}</div>
     </div>
     <div class="mb-3">
@@ -98,7 +98,7 @@ const submit = async () => {
     </div>
     <div class="mb-3">
       <label for="vf-reason" class="form-label">Why do you want to volunteer?</label>
-      <textarea id="vf-reason" v-model="reason" rows="4" class="form-control" :class="{ 'is-invalid': errors.reason }" required aria-describedby="vf-reason-help vf-reason-err" :aria-invalid="!!errors.reason"></textarea>
+      <textarea id="vf-reason" v-model="reason" rows="4" maxlength="800" class="form-control" :class="{ 'is-invalid': errors.reason }" required aria-describedby="vf-reason-help vf-reason-err" :aria-invalid="!!errors.reason"></textarea>
       <div id="vf-reason-help" class="form-text">Minimum 20 characters ({{ reason.trim().length }} so far).</div>
       <div v-if="errors.reason" id="vf-reason-err" class="invalid-feedback d-block">{{ errors.reason }}</div>
     </div>

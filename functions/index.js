@@ -12,7 +12,8 @@
  */
 const { onCall, HttpsError } = require('firebase-functions/v2/https')
 const { onDocumentCreated, onDocumentWritten } = require('firebase-functions/v2/firestore')
-const { setGlobalOptions, logger } = require('firebase-functions/v2')
+const { setGlobalOptions } = require('firebase-functions/v2')
+const logger = require('firebase-functions/logger')
 const { defineSecret, defineString } = require('firebase-functions/params')
 const admin = require('firebase-admin')
 const sgMail = require('@sendgrid/mail')

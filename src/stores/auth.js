@@ -16,7 +16,8 @@ export const authReady = new Promise((r) => (resolveReady = r))
 const syncProfile = async (u, displayName) => {
   try {
     let token = await u.getIdTokenResult()
-    if (!token.claims.role || displayName) {
+    // Re-check with the server unless already admin, so a later ADMIN_EMAILS change (or email verification) is picked up.
+    if (token.claims.role !== 'admin' || displayName) {
       await initUser({ displayName: displayName || u.displayName || '' })
       token = await u.getIdTokenResult(true) // pick up the new custom claim
     }

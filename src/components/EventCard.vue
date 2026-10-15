@@ -8,7 +8,7 @@ import { formatDate } from '../utils/format'
 import { toast } from '../composables/useToast'
 
 const props = defineProps({ event: { type: Object, required: true } })
-const { isLoggedIn, state } = useAuth()
+const { isLoggedIn, isAdmin, state } = useAuth()
 
 const selectedRating = ref('')
 const saving = ref(false)
@@ -55,7 +55,7 @@ const rate = async () => {
       <p class="small text-muted">{{ event.description }}</p>
 
       <div class="d-flex flex-wrap gap-2 mb-3 mt-auto">
-        <RouterLink class="btn btn-eco btn-sm" :to="{ name: 'join', query: { event: event.id } }">Register</RouterLink>
+        <RouterLink v-if="!isAdmin" class="btn btn-eco btn-sm" :to="{ name: 'join', query: { event: event.id } }">Register</RouterLink>
         <RouterLink class="btn btn-outline-eco btn-sm" :to="{ name: 'map', query: { event: event.id } }">Directions<span class="visually-hidden"> to {{ event.title }}</span></RouterLink>
         <button type="button" class="btn btn-outline-secondary btn-sm" @click="downloadIcs(event)">Add to calendar<span class="visually-hidden"> (.ics) for {{ event.title }}</span></button>
       </div>

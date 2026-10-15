@@ -2,7 +2,7 @@
 import { RouterLink, RouterView, useRouter } from 'vue-router'
 import ToastRegion from './components/ToastRegion.vue'
 import { useAuth } from './stores/auth'
-import { isFirebaseConfigured } from './firebase.js'
+import { isFirebaseConfigured } from './firebase'
 import { toast } from './composables/useToast'
 
 const router = useRouter()
@@ -33,8 +33,8 @@ const resend = async () => {
             <li class="nav-item"><RouterLink class="nav-link" to="/events">Events</RouterLink></li>
             <li class="nav-item"><RouterLink class="nav-link" to="/map">Map</RouterLink></li>
             <li class="nav-item"><RouterLink class="nav-link" to="/resources">Resources</RouterLink></li>
-            <li v-if="isLoggedIn" class="nav-item"><RouterLink class="nav-link" to="/join">Volunteer</RouterLink></li>
-            <li v-if="isLoggedIn" class="nav-item"><RouterLink class="nav-link" to="/impact">My Impact</RouterLink></li>
+            <li v-if="isLoggedIn && !isAdmin" class="nav-item"><RouterLink class="nav-link" to="/join">Volunteer</RouterLink></li>
+            <li v-if="isLoggedIn && !isAdmin" class="nav-item"><RouterLink class="nav-link" to="/impact">My Impact</RouterLink></li>
             <li v-if="isAdmin" class="nav-item"><RouterLink class="nav-link" to="/admin">Admin</RouterLink></li>
           </ul>
           <ul class="navbar-nav align-items-lg-center gap-lg-2">

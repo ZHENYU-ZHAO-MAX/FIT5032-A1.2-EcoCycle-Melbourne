@@ -1,6 +1,16 @@
 import { jsPDF } from 'jspdf'
-import autoTable from 'jspdf-autotable'
+import * as autoTablePkg from 'jspdf-autotable'
 import { csvSafe } from '../utils/security'
+
+// jspdf-autotable exposes its function differently depending on version / bundler interop,
+// so resolve it defensively (default, named, nested default, or the jsPDF plugin method).
+const runAutoTable = (doc, options) => {
+  const pkg = autoTablePkg
+  const fn = [pkg.default, pkg.autoTable, pkg.default?.default, pkg.default?.autoTable].find((f) => typeof f === 'function')
+  if (fn) return fn(doc, options)
+  if (typeof doc.autoTable === 'function') return doc.autoTable(options)
+  throw new Error('jspdf-autotable could not be loaded')
+}
 
 export const downloadBlob = (blob, filename) => {
   const url = URL.createObjectURL(blob)
@@ -37,7 +47,7 @@ const buildPdf = (title, columns, rows) => {
   doc.text(`EcoCycle Melbourne - ${title}`, 40, 40)
   doc.setFontSize(9)
   doc.text(`Generated ${new Date().toLocaleString('en-AU')} - ${rows.length} row(s)`, 40, 56)
-  autoTable(doc, {
+  runAutoTable(doc, {
     startY: 70,
     head: [columns.map((c) => c.label)],
     body: rows.map((r) => columns.map((c) => cellText(c, r))),

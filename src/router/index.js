@@ -6,8 +6,8 @@ const routes = [
   { path: '/events', name: 'events', component: () => import('../views/EventsView.vue'), meta: { title: 'Events' } },
   { path: '/map', name: 'map', component: () => import('../views/MapView.vue'), meta: { title: 'Event Map' } },
   { path: '/resources', name: 'resources', component: () => import('../views/ResourcesView.vue'), meta: { title: 'Resources' } },
-  { path: '/join', name: 'join', component: () => import('../views/JoinView.vue'), meta: { title: 'Volunteer Registration', requiresAuth: true } },
-  { path: '/impact', name: 'impact', component: () => import('../views/ImpactView.vue'), meta: { title: 'My Impact', requiresAuth: true } },
+  { path: '/join', name: 'join', component: () => import('../views/JoinView.vue'), meta: { title: 'Volunteer Registration', requiresAuth: true, volunteerOnly: true } },
+  { path: '/impact', name: 'impact', component: () => import('../views/ImpactView.vue'), meta: { title: 'My Impact', requiresAuth: true, volunteerOnly: true } },
   { path: '/admin', name: 'admin', component: () => import('../views/AdminView.vue'), meta: { title: 'Admin Dashboard', requiresAuth: true, requiresAdmin: true } },
   { path: '/login', name: 'login', component: () => import('../views/LoginView.vue'), meta: { title: 'Log in', guestOnly: true } },
   { path: '/register', name: 'register', component: () => import('../views/RegisterView.vue'), meta: { title: 'Create account', guestOnly: true } },
@@ -26,6 +26,9 @@ router.beforeEach(async (to) => {
   const { isLoggedIn, isAdmin } = useAuth()
   if (to.meta.requiresAuth && !isLoggedIn.value) {
     return { name: 'login', query: { redirect: to.fullPath } }
+  }
+  if (to.meta.volunteerOnly && isAdmin.value) {
+    return { name: 'admin' } // admins manage events; volunteer pages are not for them
   }
   if (to.meta.requiresAdmin && !isAdmin.value) {
     return { name: 'home', query: { denied: '1' } }

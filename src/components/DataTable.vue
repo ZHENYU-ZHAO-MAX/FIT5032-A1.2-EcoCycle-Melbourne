@@ -116,8 +116,13 @@ const doCsv = () => {
 }
 const doPdf = () => {
   if (!filtered.value.length) return toast('Nothing to export.', 'warning')
-  exportPdf(props.exportName, props.caption, props.columns, filtered.value)
-  toast(`Exported ${filtered.value.length} row(s) to PDF.`)
+  try {
+    exportPdf(props.exportName, props.caption, props.columns, filtered.value)
+    toast(`Exported ${filtered.value.length} row(s) to PDF.`)
+  } catch (e) {
+    console.error('PDF export failed', e)
+    toast('Could not create the PDF. Please try again.', 'danger')
+  }
 }
 
 defineExpose({ filtered })
